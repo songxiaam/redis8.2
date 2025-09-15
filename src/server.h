@@ -1039,15 +1039,24 @@ struct RedisModuleDigest {
 #define OBJ_FIRST_SPECIAL_REFCOUNT OBJ_STATIC_REFCOUNT
 
 struct redisObject {
-    unsigned type:4;
+//   #define OBJ_STRING 0    /* String object. */
+// #define OBJ_LIST 1      /* List object. */
+// #define OBJ_SET 2       /* Set object. */
+// #define OBJ_ZSET 3      /* Sorted set object. */
+// #define OBJ_HASH 4      /* Hash object. */
+    unsigned type:4; // 数据类型 后面的数字表示占多少比特位
+    // 底层编码方式, 1018行定义的编码
     unsigned encoding:4;
+    // 最近被访问时间
     unsigned lru:LRU_BITS; /* LRU time (relative to global lru_clock) or
                             * LFU data (least significant 8 bits frequency
                             * and most significant 16 bits access time). */
     unsigned iskvobj : 1;   /* 1 if this struct serves as a kvobj base */
     unsigned expirable : 1; /* 1 if this key has expiration time attached.
                              * If set, then this object is of type kvobj */
+    // 引用计数器
     unsigned refcount : OBJ_REFCOUNT_BITS;
+    // 指针指向存放实际数据的空间
     void *ptr;
 };
 
